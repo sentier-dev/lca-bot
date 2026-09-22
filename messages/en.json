@@ -1,0 +1,239 @@
+{
+  "common": {
+    "save": "Save",
+    "saving": "Saving…",
+    "sending": "Sending…",
+    "error": "Something went wrong. Please try again.",
+    "networkError": "Network error. Try again.",
+    "genericError": "Something went wrong",
+    "tryAgain": "Try again",
+    "delete": "Delete",
+    "keep": "Keep",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "untitled": "Untitled chat",
+    "deleteAria": "Delete {title}",
+    "duration": {
+      "soon": "a moment",
+      "minutes": "{value, plural, one {# minute} other {# minutes}}",
+      "hours": "{value, plural, one {# hour} other {# hours}}"
+    }
+  },
+  "nav": {
+    "items": {
+      "chat": "New chat",
+      "archive": "Archive",
+      "settings": "Settings"
+    },
+    "brandLinkAria": "LCA Wiki, go to a new chat",
+    "closeSidebarAria": "Close sidebar",
+    "toggleSidebarAria": "Toggle sidebar",
+    "mainMenu": "Menu",
+    "logout": "Log out",
+    "wikiLink": "Browse the wiki on GitHub"
+  },
+  "auth": {
+    "shared": {
+      "brand": "LCA Wiki",
+      "continueWithGoogle": "Continue with Google",
+      "or": "or",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.org",
+      "passwordLabel": "Password"
+    },
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Ask the LCA wiki",
+      "loginFailedFallback": "Login failed",
+      "forgotPasswordLink": "Forgot password?",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "noAccountTitle": "No account yet?",
+      "noAccountBody": "Accounts are created by Départ de Sentier. Write to <link>{email}</link> to ask for access.",
+      "errors": {
+        "rate_limited": "Too many attempts. Wait a minute and try again.",
+        "google_auth_denied": "Google sign-in was cancelled.",
+        "missing_code": "Google did not return a sign-in code. Try again.",
+        "invalid_state": "The sign-in link expired. Try again.",
+        "google_token_exchange_failed": "Google sign-in failed. Try again.",
+        "google_userinfo_failed": "Google sign-in failed. Try again.",
+        "google_no_email": "Your Google account has no verified email address.",
+        "no_account": "There is no LCA Wiki account for that Google email. Ask Départ de Sentier for access.",
+        "auth_callback_failed": "Sign-in failed. Try again."
+      }
+    },
+    "forgotPassword": {
+      "title": "Forgot your password?",
+      "subtitle": "Enter your email. If an account exists and email is configured, we send a reset link.",
+      "submit": "Send reset link",
+      "submittedTitle": "Check your email",
+      "submittedBody": "If an account exists for <bold>{email}</bold> and email sending is configured, a reset link is on its way. It expires in {hours, plural, one {# hour} other {# hours}}. Otherwise ask Départ de Sentier to reset your password.",
+      "backToLogin": "Back to sign in"
+    }
+  },
+  "password": {
+    "requirementsAria": "Password requirements",
+    "requirements": "Password must be at least 10 characters with one uppercase letter, one number, and one special character.",
+    "minLength": "At least 10 characters",
+    "uppercase": "One uppercase letter",
+    "number": "One number",
+    "special": "One special character",
+    "newLabel": "New password",
+    "confirmLabel": "Confirm password"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Your account.",
+    "account": {
+      "heading": "Account",
+      "email": {
+        "label": "Email",
+        "contactSupport": "Write to Départ de Sentier to change your email."
+      },
+      "signInMethod": {
+        "label": "Sign-in method",
+        "email": "Email and password",
+        "google": "Google"
+      },
+      "password": {
+        "heading": "Password",
+        "oauthNotice": "You sign in with Google. No password is set for this account.",
+        "currentLabel": "Current password",
+        "mismatch": "New passwords do not match.",
+        "updateFailed": "Failed to update password.",
+        "updateSuccess": "Password updated.",
+        "updateSuccessBody": "Use your new password the next time you sign in.",
+        "updating": "Updating…",
+        "submit": "Change password"
+      },
+      "signOut": "Sign out"
+    },
+    "wiki": {
+      "heading": "The wiki",
+      "body": "Answers come from the public LCA wiki maintained by Départ de Sentier.",
+      "link": "Open sentier-dev/lca-wiki on GitHub"
+    },
+    "dangerZone": {
+      "deleteAccount": {
+        "heading": "Delete account",
+        "body": "This permanently deletes your account and every chat in your archive. This cannot be undone.",
+        "button": "Delete account",
+        "failed": "Failed to delete account."
+      },
+      "deletePhrase": "delete my account",
+      "deleteDialog": {
+        "title": "Delete account",
+        "description": "Type \"{phrase}\" to confirm. This cannot be undone."
+      },
+      "deleting": "Deleting…"
+    }
+  },
+  "chat": {
+    "empty": {
+      "wordmark": "LCA Wiki",
+      "body": "Answers come from the public wiki and cite the pages they rest on.",
+      "chips": {
+        "e1": "Functional unit",
+        "e2": "BAFU in Brightway",
+        "e3": "System boundaries"
+      },
+      "examples": {
+        "e1": "What is a functional unit in ILCD terms, and how does Brightway use the word?",
+        "e2": "How do I install the BAFU 2026 database into a Brightway project with sentier-brightway?",
+        "e3": "What does the wiki say about system boundaries and cut-off?"
+      }
+    },
+    "input": {
+      "placeholder": "Ask about LCA, Brightway, Sentier, BAFU or ecoinvent…",
+      "sendAria": "Send message"
+    },
+    "bubble": {
+      "you": "You",
+      "assistant": "LCA Wiki"
+    },
+    "working": "Reading the wiki…",
+    "citations": {
+      "label": "Pages used"
+    },
+    "trace": {
+      "summary": "{count, plural, one {Looked at # step} other {Looked at # steps}}"
+    },
+    "gap": {
+      "note": "The wiki does not cover this yet. Your question was recorded for the maintainers."
+    },
+    "cap": {
+      "title": "This chat has reached its length limit.",
+      "body": "Start a new chat to keep going; this one stays in your archive.",
+      "cta": "New chat"
+    },
+    "errors": {
+      "turn_failed": "The answer could not be completed. Try again.",
+      "wiki_unavailable": "The wiki index is still loading. Try again in a moment.",
+      "network": "Network error. Check your connection and try again.",
+      "unauthorized": "Your session expired. Sign in again.",
+      "retry": "Retry"
+    }
+  },
+  "archive": {
+    "title": "Archive",
+    "subtitle": "Your previous chats. Open one to continue it.",
+    "count": "{count, plural, =0 {No chats yet} one {# chat} other {# chats}}",
+    "loadMore": "Load more",
+    "loading": "Loading…",
+    "loadError": "Could not load your chats.",
+    "untitled": "Untitled chat",
+    "messages": "{count, plural, one {# message} other {# messages}}",
+    "open": "Open",
+    "openAria": "Open {title}",
+    "rename": "Rename",
+    "renameAria": "Rename {title}",
+    "renameLabel": "Chat title",
+    "renameFailed": "Could not rename the chat.",
+    "deleteAria": "Delete {title}",
+    "deleteDialog": {
+      "title": "Delete chat",
+      "description": "\"{title}\" will be permanently removed."
+    },
+    "deleteFailed": "Could not delete the chat.",
+    "empty": {
+      "title": "Nothing here yet",
+      "body": "Chats you start appear here and can be resumed any time.",
+      "cta": "Start a chat"
+    }
+  },
+  "footer": {
+    "answersFrom": "Answers from",
+    "commit": "at",
+    "synced": "synced",
+    "project": "A Départ de Sentier project",
+    "loading": "wiki index loading"
+  },
+  "meta": {
+    "root": {
+      "description": "Ask questions about LCA practice, Brightway, the Sentier platform and the BAFU and ecoinvent databases; answers cite the public LCA wiki."
+    }
+  },
+  "system": {
+    "notFound": {
+      "message": "This page does not exist.",
+      "backHome": "Back to chat"
+    },
+    "shared": {
+      "missingTokenBody": "This link is missing a token. Please use the link from your email.",
+      "backToLogin": "Back to sign in"
+    },
+    "setPassword": {
+      "title": "Set your password",
+      "intro": "Choose a password for your LCA Wiki account.",
+      "mismatch": "Passwords do not match.",
+      "setting": "Setting…",
+      "submit": "Set password and sign in"
+    }
+  },
+  "ui": {
+    "loading": {
+      "dotsAria": "Loading",
+      "skeletonAria": "Loading content"
+    }
+  }
+}

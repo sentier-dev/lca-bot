@@ -1,0 +1,95 @@
+services:
+  db:
+    image: postgres:17
+    ports:
+      - "54322:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./docker/db/00-init.sql:/docker-entrypoint-initdb.d/00-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Applies the idempotent SQL migrations on every `up`, then seeds the two
+  # local accounts (dev for humans, e2e for Playwright). No seed in production.
+  migrate:
+    image: postgres:17
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGHOST: db
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: postgres
+    volumes:
+      - ./docker/db/00-init.sql:/init.sql:ro
+      - ./supabase/migrations:/migrations:ro
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        set -e
+        echo "=== Bootstrap (idempotent) ==="
+        psql -v ON_ERROR_STOP=1 -f /init.sql
+        echo "=== Migrations ==="
+        for f in /migrations/*.sql; do
+          echo "  Applying $$(basename $$f)"
+          psql -v ON_ERROR_STOP=1 -f "$$f"
+        done
+        seed_user() {
+          EXISTS=$$(psql -tAc "SELECT count(*) FROM auth.users WHERE email='$$1'")
+          if [ "$$EXISTS" = "0" ]; then
+            psql -v ON_ERROR_STOP=1 -c "INSERT INTO auth.users (email, password_hash, provider) VALUES ('$$1', crypt('$$2', gen_salt('bf', 12)), 'email');"
+            echo "  Seeded $$1"
+          fi
+        }
+        seed_user dev@lca-wiki.local devpassword123
+        seed_user e2e@lca-wiki.local e2epassword123
+        echo "=== Done ==="
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      NODE_ENV: development
+      JWT_SECRET: ${JWT_SECRET}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      MOCK_ANTHROPIC: ${MOCK_ANTHROPIC:-}
+      CHAT_MODEL: ${CHAT_MODEL:-claude-opus-5}
+      TITLE_MODEL: ${TITLE_MODEL:-claude-haiku-4-5-20251001}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      EMAIL_FROM: ${EMAIL_FROM:-}
+      EMAIL_FROM_NAME: ${EMAIL_FROM_NAME:-LCA Wiki}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      CONTACT_EMAIL: ${CONTACT_EMAIL:-info@d-d-s.ch}
+      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
+      WIKI_REPO_URL: https://github.com/sentier-dev/lca-wiki.git
+      WIKI_PUBLIC_BASE_URL: https://github.com/sentier-dev/lca-wiki/blob
+      WIKI_DATA_DIR: /data/wiki
+      WIKI_SYNC_INTERVAL_MINUTES: "60"
+      WIKI_SYNC_DISABLED: ${WIKI_SYNC_DISABLED:-0}
+      WIKI_SYNC_SECRET: ${WIKI_SYNC_SECRET:-}
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./messages:/app/messages
+      - ./next.config.ts:/app/next.config.ts
+      - wiki-data:/data/wiki
+
+volumes:
+  db-data:
+  wiki-data:

@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+/* ============================================================
+   LCA WIKI (Départ de Sentier) design tokens
+   Palette shared with the DdS dashboards (dashboard.d-d-s.ch).
+   ============================================================ */
+
+@theme inline {
+  /* DdS palette, by name */
+  --color-dds-bg: #F0EEE1;
+  --color-dds-surf: #FFFFFF;
+  --color-dds-txt: #2B2B2B;
+  --color-dds-dim: #555555;
+  --color-dds-bord: #d4d2c5;
+  --color-dds-accent: #3C5343;
+  --color-dds-orange: #C1623F;
+  --color-dds-blue: #84AE99;
+  --color-dds-rust: #8a3e25;
+  --color-dds-green: #3a7a60;
+  --color-dds-col-fill: #e8e6d9;
+
+  /* Semantic names the components use */
+  --color-surface: #F0EEE1;
+  --color-surface-dim: #e8e6d9;
+  --color-surface-bright: #FFFFFF;
+  --color-surface-container-lowest: #FFFFFF;
+  --color-surface-container-low: #f7f5ec;
+  --color-surface-container: #e8e6d9;
+  --color-surface-container-high: #dfdccd;
+  --color-surface-container-highest: #d4d2c5;
+  --color-surface-variant: #e8e6d9;
+
+  --color-on-surface: #2B2B2B;
+  --color-on-surface-variant: #555555;
+  --color-on-background: #2B2B2B;
+  --color-outline: #d4d2c5;
+  --color-outline-variant: #e0ded2;
+
+  --color-primary: #3C5343;
+  --color-primary-container: #e4e9e5;
+  --color-on-primary: #FFFFFF;
+  --color-on-primary-container: #2B2B2B;
+
+  --color-secondary: #555555;
+  --color-secondary-container: #e8e6d9;
+  --color-on-secondary: #FFFFFF;
+  --color-on-secondary-container: #2B2B2B;
+
+  --color-tertiary: #84AE99;
+  --color-tertiary-container: #eef4f0;
+  --color-on-tertiary: #2B2B2B;
+  --color-on-tertiary-container: #3C5343;
+
+  --color-error: #8a3e25;
+  --color-error-container: #f6ebe6;
+  --color-on-error: #FFFFFF;
+  --color-on-error-container: #5c2915;
+
+  --color-warning: #C1623F;
+  --color-success: #3a7a60;
+
+  --color-inverse-surface: #3C5343;
+  --color-inverse-on-surface: #F0EEE1;
+  --color-inverse-primary: #84AE99;
+
+  --shadow-ambient: 0 8px 24px rgba(43, 43, 43, 0.06);
+  --shadow-elevated: 0 24px 48px rgba(43, 43, 43, 0.12);
+  --shadow-sm: 0 1px 4px rgba(43, 43, 43, 0.05);
+
+  --font-headline: var(--font-nunito), system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: var(--font-nunito), system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-label: var(--font-nunito), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+body {
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+}
+
+::selection {
+  background-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
+}
+
+/* Solid accent fill; the name is kept because buttons and the login form use it. */
+.ink-gradient {
+  background: var(--color-primary);
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #d4d2c5 transparent;
+}
+.custom-scrollbar::-webkit-scrollbar { width: 10px; height: 10px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #d4d2c5;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #b9b6a6; background-clip: padding-box; }
+
+html { color-scheme: light; scroll-behavior: smooth; }
+
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-enter { animation: page-enter 0.22s ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

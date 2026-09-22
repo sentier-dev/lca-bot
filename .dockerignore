@@ -1,0 +1,57 @@
+# Dependencies & build output (rebuilt inside the image)
+node_modules
+.next
+out
+build
+worker/node_modules
+worker/dist
+admin/node_modules
+
+# VCS & CI
+.git
+.gitignore
+.github
+
+# Secrets & env files — only .env.example is allowed in image context
+.env
+.env.*
+!.env.example
+
+# Terraform — never ship state, tfvars, plans, or provider cache
+infra/.terraform
+infra/.terraform.lock.hcl
+infra/terraform.tfvars
+infra/terraform.tfstate
+infra/terraform.tfstate.backup
+infra/*.tfstate
+infra/*.tfstate.*
+infra/*.tfplan
+infra/.terraform.tfstate.lock.info
+
+# Tests & local-only tooling
+tests
+e2e
+playwright-report
+test-results
+coverage
+.vitest
+
+# Docs & repo metadata (not needed at runtime)
+docs
+*.md
+LICENSE
+
+# Local-dev artifacts
+docker
+docker-compose*.yml
+.vscode
+.idea
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc local
+.superpowers
+.gstack

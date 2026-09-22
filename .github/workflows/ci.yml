@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "24"
+
+jobs:
+  validate:
+    name: Lint, Type-check, Test & Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # ── Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Node.js setup ────────────────────────────────────────────────────
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      # ── Install dependencies ──────────────────────────────────────────────
+      # Using npm install instead of npm ci due to platform-specific optional dep differences
+      - name: Install dependencies
+        run: npm install --no-audit
+
+      # ── Lint ──────────────────────────────────────────────────────────────
+      # Run ESLint — fail on errors only. Tighten to --max-warnings 0 once existing warnings are fixed.
+      - name: Lint
+        run: npx eslint
+
+      # ── Type check ────────────────────────────────────────────────────────
+      # Run TypeScript compiler in strict mode (noEmit), fail on any type error.
+      - name: Type check
+        run: npx tsc --noEmit
+
+      # ── Unit tests ────────────────────────────────────────────────────────
+      # Run the full unit test suite and fail below the 80 percent coverage gate.
+      - name: Unit tests
+        run: npm run test:coverage
+        env:
+          NODE_ENV: test
+
+      # ── Production build ──────────────────────────────────────────────────
+      # Build the Next.js app in production mode. Fail if any build error.
+      # Dummy env vars are needed since env.ts validates at import time.
+      - name: Build
+        run: npm run build
+        env:
+          ANTHROPIC_API_KEY: test-key-ci
+          DATABASE_URL: postgres://ci:ci@localhost:5432/ci
+          JWT_SECRET: ci-jwt-secret-placeholder-value-that-is-at-least-32-characters-long
+
+      # ── Bundle size check ─────────────────────────────────────────────────
+      # Report the JS bundle size and fail if it exceeds the threshold.
+      # Default threshold: 500KB for First Load JS (reasonable for a Next.js app).
+      - name: Check bundle size
+        run: |
+          THRESHOLD_KB=${BUNDLE_SIZE_THRESHOLD_KB:-500}
+          echo "Bundle size threshold: ${THRESHOLD_KB}KB"
+
+          if [ -f .next/routes-manifest.json ]; then
+            TOTAL_KB=$(find .next/static -name '*.js' -exec wc -c {} + 2>/dev/null | tail -1 | awk '{printf "%.0f", $1/1024}')
+            echo "Total client JS bundle: ${TOTAL_KB}KB"
+
+            if [ "$TOTAL_KB" -gt "$THRESHOLD_KB" ]; then
+              echo "::error::Bundle size ${TOTAL_KB}KB exceeds threshold ${THRESHOLD_KB}KB"
+              exit 1
+            fi
+            echo "Bundle size within threshold"
+          else
+            echo "::warning::Could not find build output to check bundle size"
+          fi
+        env:
+          # NOTE: this metric sums ALL emitted JS including lazy async chunks,
+          # not first-load JS.
+          # Raised from 1200 to 1600: KaTeX (math rendering) adds ~280KB.
+          BUNDLE_SIZE_THRESHOLD_KB: "1600"
+
+      # ── Dependency audit ──────────────────────────────────────────────────
+      # Report high and critical vulnerabilities. Non-blocking — upstream deps may have
+      # known issues that don't affect our usage. Review manually and upgrade as needed.
+      - name: Dependency audit
+        run: npm audit --audit-level=high || true

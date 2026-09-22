@@ -1,0 +1,7 @@
+# Copy to docker-compose.override.yml to serve the wiki from a local checkout
+# instead of cloning from GitHub inside the container. Compose merges it
+# automatically. Pair it with WIKI_SYNC_DISABLED=1 in .env.docker.
+services:
+  app:
+    volumes:
+      - /home/laurenz/dds/lca-wiki:/data/wiki:ro
